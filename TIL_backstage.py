@@ -20,18 +20,26 @@ class Backstage:
 		# TO BE DONE (<img>)
 		#get event titles
 		for event in events:
+			eventDict={}
 			#get event title + link
 			titles=event.findAll('h2', class_='pos-title')
 			for title in titles:
 				eventNames=title.findAll('a')
 				for eventName in eventNames:
-					print(eventName)
+					eventDict['eventName']=eventName.text
 			#get event date
 			datetimes=event.findAll('div', class_='element-date')
 			for datetime in datetimes:
 				dts=datetime.findAll('p')
 				for dt in dts:
-					print(dt)
+					eventDict['datetime']=dt.text
+			eventList.append(eventDict)
+		return eventList
+
+	def printEvents(self,eventList):
+		for item in eventList:
+			result=eventList.pop()['datetime'] + "|" + eventList.pop()['eventName']
+			print(result)
 
 
 

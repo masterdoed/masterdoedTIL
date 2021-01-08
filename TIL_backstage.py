@@ -29,6 +29,8 @@ class Backstage:
 				eventNames=title.findAll('a')
 				for eventName in eventNames:
 					eventDict['eventname']=eventName.text
+					link="https://backstage.info"+eventName['href']
+					eventDict['link']=link
 			#get weekday, date, time
 			datetimes=event.findAll('div', class_='element-date')
 			for datetime in datetimes:
@@ -44,21 +46,19 @@ class Backstage:
 					eventDict['time']=time.strip()
 			#get event tags
 			itemtags=event.findAll('div', class_='element-itemtag')
-			for itemtag in itemtags:
-				genre=""
-				tags=itemtag.findAll('li')
-				i=0
-				for t in tags:
-					if len(tags)<=1:
-						genre=t.text
-					else:
-						genre=genre+","+t.text
-				if genre=="":
-					genre="unknown"
+			if len(itemtags) > 0:
+				for itemtag in itemtags:
+					genre=""
+					i=0
+					tags=itemtag.findAll('li')
+					for t in tags:
+						if i==0:
+							genre=t.text
+						else:
+							genre=genre+","+t.text
 					eventDict['itemtag']=genre
-				else:	
-					eventDict['itemtag']=genre
-
+			else:
+				eventDict['itemtag']="unknown"
 			#add eventDict to eventList
 			eventList.append(eventDict)
 
@@ -66,9 +66,8 @@ class Backstage:
 
 	def printEvents(self,eventList):
 		for item in eventList:
-			#result = item['itemtag'] + "|" + item['weekday'] + "|" + item['date'] + "|" + item['time'] + "|" + item['eventname']
-			print(item['itemtag'])
-			
+			result = item['itemtag'] + "|" + item['weekday'] + "|" + item['date'] + "|" + item['time'] + "|" + item['eventname'] + "|" + item['link']
+			print(result)
 
 
 

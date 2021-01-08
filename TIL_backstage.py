@@ -2,15 +2,38 @@ import os
 import requests
 from bs4 import BeautifulSoup
 
+#DATAMODEL FOR eventDict
+## media
+## link
+## eventname
+## link
+## weekday
+## date
+## time
+## itemtag
+
 
 class Backstage:
 
 	url=""
+	myGenres=[]
 
 	def __init__(self):
 		self.url="https://backstage.info/veranstaltungen-2/alle-veranstaltungen/1"
 		#https://backstage.info/veranstaltungen-2/alle-veranstaltungen/2
 
+	#iterate over pagination if there is more than one page with events
+	def iterateURL(self,url):
+		urllist=[]
+
+		return urllist 
+
+	#filter item tags for interesting genres
+	def filterGenres(self, myGenres, eventList):
+
+		return eventlist
+
+	#extract events from backstage events website
 	def readBackstage(self,url):
 		eventList=[]
 		html=requests.get(url).text

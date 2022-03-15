@@ -48,6 +48,17 @@ def getBMReleaseLinks(webobject):
     return resultList
 
 
+# Function to follow each release link and get metadata
+def getBMReleaseMeta(resultList):
+    metaList=[]
+    ## TBD
+    return metaList
+
+
+
+# Function to store release information and metadata to database
+def storeRelease(metaList):    
+    ## TBD
 
 
 

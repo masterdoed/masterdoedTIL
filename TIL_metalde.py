@@ -1,4 +1,3 @@
-from distutils.filelist import findall
 import requests
 import time
 import random
@@ -60,7 +59,7 @@ def parseBMReleaseMeta(url):
 	metaList=[]
 	webobject=getURL(url)
 	resultbody=webobject.find('div', {'class': 'article-info card'})
-	if len(resultbody) >= 1 and t < 1:
+	if len(resultbody) >= 1:
 		td=resultbody.find_all('td')
 		print(td)
 	## DOED

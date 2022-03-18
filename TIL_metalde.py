@@ -48,24 +48,33 @@ def getBMReleaseLinks(webobject):
     return resultList
 
 
+
 # Function to follow each release link and get metadata
 def getBMReleaseMeta(resultList):
-    metaList=[]
-    ## TBD
-    return metaList
+	metaList=[]
+	for i in resultList:
+		parseBMReleaseMeta(i)
 
+# Function to parse a resultList url and convert it to a metList item
+def parseBMReleaseMeta(url):
+	metaList=[]
+	webobject=getURL(url)
+	resultbody=webobject.find('div', {'class': 'article-info card'})
+	if len(resultbody) >= 1 and t < 1:
+		td=resultbody.find_all('td')
+		print(td)
+	## DOED
+		
 
 
 # Function to store release information and metadata to database
 def storeRelease(metaList):    
     ## TBD
-
-
-
+	return metaList
 
 # main function
 def main():
-	print(getBMReleaseLinks(getURL("https://www.metal.de/reviews/genre/black-metal/")))
+	getBMReleaseMeta(getBMReleaseLinks(getURL("https://www.metal.de/reviews/genre/black-metal/")))
 
 # main caller
 if __name__ == '__main__':

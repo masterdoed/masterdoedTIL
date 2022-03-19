@@ -1,3 +1,4 @@
+from unittest import result
 import requests
 import time
 import random
@@ -50,26 +51,43 @@ def getBMReleaseLinks(webobject):
 
 # Function to follow each release link and get metadata
 def getBMReleaseMeta(resultList):
-	metaList=[]
 	for i in resultList:
-		parseBMReleaseMeta(i)
+		## TASK: STORE IN DATABASE
+		print(parseBMReleaseMeta(i))
+
+
 
 # Function to parse a resultList url and convert it to a metList item
+# metaDict structure: URL ALBUM BAND GENRE DATE LABEL
 def parseBMReleaseMeta(url):
-	metaList=[]
+	metaDict={}
 	webobject=getURL(url)
 	resultbody=webobject.find('div', {'class': 'article-info card'})
 	if len(resultbody) >= 1:
-		td=resultbody.find_all('td')
-		print(td)
-	## DOED
-		
-
+		headings=resultbody.findChildren('h3')
+		heading=headings[0]
+		album=heading.get_text().split(" - ")[1]
+		metaDict["url"]=url
+		metaDict["album"]=album
+		tables=resultbody.findChildren('table')
+		myTable=tables[0]
+		rows=myTable.findChildren('tr')
+		metaDict["band"]=rows[0].findChildren('td')[0].string
+		metaDict["genre"]=rows[3].findChildren('td')[0].string
+		metaDict["date"]=rows[6].findChildren('td')[0].string
+		metaDict["label"]=rows[7].findChildren('td')[0].string
+		## TASK: GET SHOPPING DETAILS ADD AFFILIATE LINK
+	return metaDict
 
 # Function to store release information and metadata to database
 def storeRelease(metaList):    
-    ## TBD
+    ## TASK: TBD
 	return metaList
+
+def getAffiliate(name):
+	## TASK: TBD
+	return name
+
 
 # main function
 def main():

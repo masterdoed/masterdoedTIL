@@ -49,12 +49,12 @@ def getBMReleaseLinks(webobject):
 
 
 
-# Function to follow each release link and get metadata
+# Function to follow each release link, retrieve metadata and store in dictList
 def getBMReleaseMeta(resultList):
+	dictList=[]
 	for i in resultList:
-		## TASK: STORE IN DATABASE
-		print(parseBMReleaseMeta(i))
-
+		dictList.append(parseBMReleaseMeta(i))
+	return dictList
 
 
 # Function to parse a resultList url and convert it to a metList item
@@ -84,15 +84,46 @@ def storeRelease(metaList):
     ## TASK: TBD
 	return metaList
 
+# Function to add and/or retrieve an affiliate link 
 def getAffiliate(name):
 	## TASK: TBD
 	return name
 
+# simple class for printing dict in plaintext
+def printer(dict):
+	for d in dict:
+		print(d["band"], d["album"], d["date"], d["label"], d["url"], )
+
+# simpel class for printing dict as html
+def htmlPrinter(dict):
+	print("<html><head><title>BLACK METAL RELEASES</title></head><body>")
+	print("<table>")
+	for d in dict:
+		print("<tr>")
+		print("<td>")
+		print(d["band"])
+		print("</td>")
+		print("<td>")
+		print(d["album"])
+		print("</td>")
+		print("<td>")
+		print(d["date"])
+		print("</td>")
+		print("<td>")
+		print(d["label"])
+		print("</td>")
+		print("<td>")
+		print(d["url"])
+		print("</td>")
+		print("</tr>")
+	print("</table>")
+	print("</html>")
+
 
 # main function
 def main():
-	getBMReleaseMeta(getBMReleaseLinks(getURL("https://www.metal.de/reviews/genre/black-metal/")))
-
+	printer(getBMReleaseMeta(getBMReleaseLinks(getURL("https://www.metal.de/reviews/genre/black-metal/"))))
+	#htmlPrinter(getBMReleaseMeta(getBMReleaseLinks(getURL("https://www.metal.de/reviews/genre/black-metal/"))))
 # main caller
 if __name__ == '__main__':
 	main()

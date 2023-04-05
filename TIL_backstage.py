@@ -3,95 +3,42 @@ import requests
 from bs4 import BeautifulSoup
 
 #DATAMODEL FOR eventDict
-## media
-## link
-## eventname
-## link
-## weekday
-## date
-## time
-## itemtag
-##
+#event data format: datetime|title|url|media|eventimlink|shopping
+
 
 class Backstage:
 
-	url=""
-	myGenres=[]
-
-	def __init__(self):
-		self.url="https://backstage.info/veranstaltungen-2/alle-veranstaltungen/1"
-		#https://backstage.info/veranstaltungen-2/alle-veranstaltungen/2
-
-	#iterate over pagination if there is more than one page with events
-	def iterateURL(self,url):
-		urllist=[]
-
-		return urllist 
-
-	#filter item tags for interesting genres
-	def filterGenres(self, myGenres, eventList):
-
-		return eventlist
+	eventList=[]
+	url="https://backstage.eu/veranstaltungen.html?p=1"
 
 	#extract events from backstage events website
-	def readBackstage(self,url):
-		eventList=[]
-		html=requests.get(url).text
-		soup=BeautifulSoup(html, 'lxml')
-		#get all event DIV tags
-		events=soup.find_all(class_='teaser-item event')
-		
+	def readBackstageEvent(self):
+		u=self.url
+		el=self.eventList
+		#url_html will hold the html output of the url request
+		url_html=requests.get(u).text
+		#url_soup will hold the parsable html output as lxml
+		url_soup=BeautifulSoup(url_html, 'lxml')
+		#url_events will hold all event entries per page based on html class
+		url_events=url_soup.find_all(class_='item product product-item')
 		#process and transform event data to dict
-		for event in events:
+		for event in url_events:
 			eventDict={}
-			#get event media
-			# TO BE DONE (<img>)
-			#get event title
-			titles=event.findAll('h2', class_='pos-title')
-			for title in titles:
-				eventNames=title.findAll('a')
-				for eventName in eventNames:
-					eventDict['eventname']=eventName.text
-					link="https://backstage.info"+eventName['href']
-					eventDict['link']=link
-			#get weekday, date, time
-			datetimes=event.findAll('div', class_='element-date')
-			for datetime in datetimes:
-				dts=datetime.findAll('p')
-				for dt in dts:
-					datetime=dt.text
-					dtSplit=datetime.split(",")
-					weekday=dtSplit[0]
-					date=dtSplit[1].split("Beginn:")[0]
-					time=dtSplit[1].split("Beginn:")[1]
-					eventDict['weekday']=weekday.strip()
-					eventDict['date']=date.strip()
-					eventDict['time']=time.strip()
-			#get event tags
-			itemtags=event.findAll('div', class_='element-itemtag')
-			if len(itemtags) > 0:
-				for itemtag in itemtags:
-					genre=""
-					i=0
-					tags=itemtag.findAll('li')
-					for t in tags:
-						if i==0:
-							genre=t.text
-						else:
-							genre=genre+","+t.text
-					eventDict['itemtag']=genre
-			else:
-				eventDict['itemtag']="unknown"
+			#extract title from events
+			#event_titles will hold all event titles per page
+			event_titles=event.findAll('a', class_='product-item-link')
+			for title in event_titles:
+				eventDict['title']=title.text.translate({ord('\t'): None}).translate({ord('\n'): None})
+				eventDict['url']=title['href']
+			#extract datetime from event
+			event_datetimes=event.findAll('strong', class_='product name product-item-name eventdate')
+			for event_dt in event_datetimes:
+				eventDict['datetime']=event_dt.text
 			#add eventDict to eventList
-			eventList.append(eventDict)
+			el.append(eventDict)
+		return el
 
-		return eventList
-
-	def printEvents(self,eventList):
-		for item in eventList:
-			result = item['itemtag'] + "|" + item['weekday'] + "|" + item['date'] + "|" + item['time'] + "|" + item['eventname'] + "|" + item['link']
-			print(result)
-
+	
 
 
 
